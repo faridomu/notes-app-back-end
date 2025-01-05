@@ -1,17 +1,22 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable no-unused-vars */
-const {nanoid} = require('nanoid');
-const notes = require('./notes');
+const { nanoid } = require("nanoid");
+const notes = require("./notes");
 
 const addNoteHandler = (request, h) => {
-  const {title, tags, body} = request.payload;
+  const { title, tags, body } = request.payload;
 
   const id = nanoid(16);
   const createdAt = new Date().toISOString();
   const updateAt = createdAt;
 
   const newNote = {
-    title, tags, body, id, createdAt, updateAt,
+    title,
+    tags,
+    body,
+    id,
+    createdAt,
+    updateAt,
   };
 
   notes.push(newNote);
@@ -20,8 +25,8 @@ const addNoteHandler = (request, h) => {
 
   if (isSuccess) {
     const response = h.response({
-      status: 'success',
-      message: 'Notes added!',
+      status: "success",
+      message: "Notes added!",
       data: {
         noteId: id,
       },
@@ -31,37 +36,37 @@ const addNoteHandler = (request, h) => {
   }
 
   const response = h.response({
-    status: 'fail',
-    message: 'Notes failed to added',
+    status: "fail",
+    message: "Notes failed to added",
   });
   response.code(500);
   return response;
 };
 
 const getAllNotesHandler = () => ({
-  status: 'success',
+  status: "success",
   data: {
     notes,
   },
 });
 
 const getNoteByIdHandler = (request, h) => {
-  const {id} = request.params;
+  const { id } = request.params;
 
   const note = notes.filter((n) => n.id === id)[0];
 
   if (note !== undefined) {
     return {
-      status: 'success',
+      status: "success",
       data: {
         note,
       },
     };
-  };
+  }
 
   const response = h.response({
-    status: 'fail',
-    message: 'Notes not found',
+    status: "fail",
+    message: "Notes not found",
   });
 
   response.code(404);
@@ -69,8 +74,8 @@ const getNoteByIdHandler = (request, h) => {
 };
 
 const editNoteByIdHandler = (request, h) => {
-  const {id} = request.params;
-  const {title, tags, body} = request.payload;
+  const { id } = request.params;
+  const { title, tags, body } = request.payload;
 
   const updateAt = new Date().toISOString;
 
@@ -86,39 +91,39 @@ const editNoteByIdHandler = (request, h) => {
     };
 
     const response = h.response({
-      status: 'success',
-      message: 'notes update success!',
+      status: "success",
+      message: "notes update success!",
     });
     response.code(200);
     return response;
   }
 
   const response = h.response({
-    status: 'fail',
-    message: 'Failed to update note. Id not found',
+    status: "fail",
+    message: "Failed to update note. Id not found",
   });
   response.code(404);
   return response;
 };
 
 const deleteNoteByIdHandler = (request, h) => {
-  const {id} = request.params;
+  const { id } = request.params;
 
   const index = notes.findIndex((note) => note.id === id);
 
   if (index !== -1) {
     notes.splice(index, 1);
     const response = h.response({
-      status: 'success',
-      message: 'Note deleted!',
+      status: "success",
+      message: "Note deleted!",
     });
     response.code(200);
     return response;
   }
 
   const response = h.response({
-    status: 'fail',
-    message: 'Catatan gagal dihapus. Id tidak ditemukan',
+    status: "fail",
+    message: "Catatan gagal dihapus. Id tidak ditemukan",
   });
   response.code(404);
   return response;
